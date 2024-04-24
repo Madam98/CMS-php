@@ -1,0 +1,36 @@
+Options +FollowSymLinks -Indexes
+RewriteEngine On
+
+Allow From All
+Satisfy Any
+
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Upewnij się, że następujące reguły nie dotyczą plików i katalogów, które istnieją
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Tutaj umieszczamy reguły przekierowujące
+RewriteRule ^([a-zA-Z0-9]+)$ ./index.php?c=$1 [L,QSA]
+
+# Modyfikowana reguła, aby uniknąć przekierowania /app/core
+#RewriteRule ^(?!app/core|app/controller|app/model|app/entity|app/utils|app/view)([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=$2 [L,QSA]
+
+RewriteRule ^([a-zA-Z0-9]+)/demote/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=demote&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/upgrade/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=upgrade&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/delete/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=delete&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/status/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=status&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/activate/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=activate&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/deactivate/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=deactivate&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/update/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=update&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/updatecategory/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=updatecategory&id=$2 [L,QSA]
+
+
+
+
+# Niestandardowe strony błędów
+#ErrorDocument 404 /app/view/error/full404.php

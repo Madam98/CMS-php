@@ -1,0 +1,33 @@
+Options +FollowSymLinks -Indexes
+RewriteEngine On
+
+Allow From All
+Satisfy Any
+
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+RewriteRule ^([a-zA-Z0-9]+)/app/core$ - [L,NC]
+
+# Upewnij się, że następujące reguły nie dotyczą plików i katalogów, które istnieją
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Tutaj umieszczamy reguły przekierowujące
+RewriteRule ^([a-zA-Z0-9]+)$ ./index.php?c=$1 [L,QSA]
+
+# Modyfikowana reguła, aby uniknąć przekierowania /app/core
+RewriteRule ^(?!app/core|app/controller|app/model|app/entity|app/utils|app/view)([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=$2 [L,QSA]
+
+
+RewriteRule ^([a-zA-Z0-9]+)/category/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=category&idCategory=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/search/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=search&phrase=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/view/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=view&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/edit/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=edit&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/delete/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=delete&id=$2 [L,QSA]
+RewriteRule ^([a-zA-Z0-9]+)/addComment/([a-zA-Z0-9]+)$ ./index.php?c=$1&a=addComment&id=$2 [L,QSA]
+
+# Niestandardowe strony błędów
+ErrorDocument 404 /app/view/error/full404.php
